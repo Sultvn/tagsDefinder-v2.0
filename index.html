@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <button type="button" id="check">Check</button>
+    <p id="answer"></p>
+    <!-- <script src="./script.js"></script> -->
+    <script>
+      const input = document.querySelector("#input");
+      const check = document.querySelector("#check");
+      const answer = document.querySelector("#answer");
+
+      const definingTheTags = (word) => {
+        let tag = "",
+          tags = [],
+          isTag = false;
+
+
+
+        for (const letter of word) {
+          if (letter === "<") {
+            isTag = true;
+          }
+          if (isTag) {
+            tag += letter;
+          }
+          if (letter === ">") {
+            isTag = false;
+            tags.push(tag);
+            tag = "";
+          }
+        }
+
+
+        
+        return tags;
+      };
+
+      let isTagequal = (tags) => {
+        let len = tags.length;
+        console.log(tags);
+        let mistakeTags = [];
+        for (let i = 0; i < len; i++) {
+          if (!tags[i]) {
+            tags.forEach((item) => {
+              if (!mistakeTags.includes(item)) mistakeTags.push(item);
+            });
+            break;
+          }
+
+          let tagName = tags[i].replace(/\<|\>/g, "");
+          let index = tags.indexOf("</" + tagName + ">");
+          //   console.log(index);
+          //   console.log(tagName);
+          //   console.log(tags);
+          if (index >= 0) {
+            tags.splice(i, 1);
+            tags.splice(index - 1, 1);
+          } else {
+            console.log(tags[i]);
+            if (!mistakeTags.includes(tags[i])) mistakeTags.push(tags[i]);
+          }
+        }
+        if (!mistakeTags.length) return `Correct coding of HTML tags👍`;
+
+        return ` ⛔️ ERROR!!!!!!!\n\nNumber of mistaken tags: ${mistakeTags.length}\nList of mistaken tags: ${mistakeTags} `;
+      };
+
+      //   console.log(isTagequal(definingTheTags("<p><a><b></p>")));
+      //   if (mistakeTags.length === 0 && a > 0)
+      //     return `Correct coding of HTML tags👍`;
+
+      //   return `   ⛔️ ERROR!!!!!!!\n\nNumber of mistaken tags: ${mistakeTags.length}\nList of mistaken tags: ${mistakeTags} `;
+      //   console.log(mistakeTags);
+
+      //   const isTagEqual = (tags) => {
+      //     // console.log(tags);
+      //     const mistakeTags = [];
+      //     let a = tags.length;
+      //     while (tags.length) {
+      //       const tag = "<" + tags[0]?.slice(2);
+
+      //       if (tags[0][1] === "/" && mistakeTags.includes(tag)) {
+      //         mistakeTags.splice(mistakeTags.indexOf(tag), 1);
+      //         tags.shift();
+      //       } else mistakeTags.push(tags.shift());
+      //     }
+
+      //     if (mistakeTags.length === 0 && a > 0)
+      //       return `Correct coding of HTML tags👍`;
+
+      //     return `   ⛔️ ERROR!!!!!!!\n\nNumber of mistaken tags: ${mistakeTags.length}\nList of mistaken tags: ${mistakeTags} `;
+      //   };
+
+      function checkInput(e) {
+        let val = input.value;
+        if (e?.key === "Enter" || e.type === "click") {
+          if (val.trim()) {
+            answer.textContent = isTagequal(definingTheTags(val));
+            console.log(isTagequal(definingTheTags(val)));
+          }
+        }
+      }
+      check.addEventListener("click", checkInput);
+      input.addEventListener("keydown", checkInput);
+    </script>
+  </body>
+</html>
